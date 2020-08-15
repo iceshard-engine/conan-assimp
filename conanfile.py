@@ -155,21 +155,23 @@ conan_basic_setup()""")
         self.copy("*.h", dst="include_debug", src="{}/include".format(build_artifacts_debug))
         self.copy("*.h", dst="include_release", src="{}/include".format(build_artifacts_release))
 
-        lib_extension = ".a"
+        lib_extensions = ["*.a"]
         if self.settings.os == "Windows":
-            lib_extension = ".lib"
+            lib_extensions = ["*.lib"]
 
-        self.copy(lib_extension, dst="lib/Debug", src=build_artifacts_debug, keep_path=False)
-        self.copy(lib_extension, dst="lib/Release", src=build_artifacts_release, keep_path=False)
+        for lib_extension in lib_extensions:
+            self.copy(lib_extension, dst="lib/Debug", src="{}/lib".format(build_artifacts_debug), keep_path=False)
+            self.copy(lib_extension, dst="lib/Release", src="{}/lib".format(build_artifacts_release), keep_path=False)
 
-        bin_extension = ".so"
+        bin_extensions = ["*.so"]
         if self.settings.os == "Windows":
-            bin_extension = ".dll"
+            bin_extensions = ["*.dll", "*.pdb"]
         if self.settings.os == "Macos":
-            bin_extension = ".dynlib"
+            bin_extensions = ["*.dynlib"]
 
-        self.copy(bin_extension, dst="bin/Debug", src=build_artifacts_debug, keep_path=False)
-        self.copy(bin_extension, dst="bin/Release", src=build_artifacts_release, keep_path=False)
+        for bin_extension in bin_extensions:
+            self.copy(bin_extension, dst="bin/Debug", src="{}/bin".format(build_artifacts_debug), keep_path=False)
+            self.copy(bin_extension, dst="bin/Release", src="{}/bin".format(build_artifacts_release), keep_path=False)
 
     def package_info(self):
         self.cpp_info.libs = []
