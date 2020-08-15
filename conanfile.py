@@ -174,11 +174,14 @@ conan_basic_setup()""")
     def package_info(self):
         self.cpp_info.libs = []
         self.cpp_info.libdirs = []
-        self.cpp_info.debug.libs = ["assimp-vc142-mtd", "IrrXMLd", "zlibd"]
-        self.cpp_info.release.libs = ["assimp-vc142-mt", "IrrXML", "zlib"]
-        self.cpp_info.debug.libdirs = ["lib/Debug"]
-        self.cpp_info.release.libdirs = ["lib/Release"]
-        self.cpp_info.debug.bindirs = ["lib/Debug"]
-        self.cpp_info.release.bindirs = ["lib/Release"]
+        self.cpp_info.bindirs = []
+
         self.cpp_info.debug.includedirs = ["include_debug"]
+        self.cpp_info.debug.libs = ["assimp-vc142-mtd", "IrrXMLd", "zlibd"]
+        self.cpp_info.debug.libdirs = ["lib/Debug"]
+        self.cpp_info.debug.bindirs = ["lib/Debug"]
+
         self.cpp_info.release.includedirs = ["include_release"]
+        self.cpp_info.release.libs = ["assimp-vc142-mt", "IrrXML", "zlib"]
+        self.cpp_info.release.libdirs = ["lib/Release"]
+        self.cpp_info.release.bindirs = ["lib/Release"]
