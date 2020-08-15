@@ -155,17 +155,21 @@ conan_basic_setup()""")
         self.copy("*.h", dst="include_debug", src="{}/include".format(build_artifacts_debug))
         self.copy("*.h", dst="include_release", src="{}/include".format(build_artifacts_release))
 
-        artifact_extensions = []
+        lib_extension = ".a"
         if self.settings.os == "Windows":
-            artifact_extensions = ["*.lib", "*.dll"]
-        elif self.settings.os == "Linux":
-            artifact_extensions = ["*.a", "*.so*"]
-        else:
-            artifact_extensions = ["*.a", "*.dylib*"]
+            lib_extension = ".lib"
 
-        for ext in artifact_extensions:
-            self.copy(ext, dst="lib/Debug", src=build_artifacts_debug, keep_path=False)
-            self.copy(ext, dst="lib/Release", src=build_artifacts_release, keep_path=False)
+        self.copy(lib_extension, dst="lib/Debug", src=build_artifacts_debug, keep_path=False)
+        self.copy(lib_extension, dst="lib/Release", src=build_artifacts_release, keep_path=False)
+
+        bin_extension = ".so"
+        if self.settings.os == "Windows":
+            bin_extension = ".dll"
+        if self.settings.os == "Macos":
+            bin_extension = ".dynlib"
+
+        self.copy(bin_extension, dst="bin/Debug", src=build_artifacts_debug, keep_path=False)
+        self.copy(bin_extension, dst="bin/Release", src=build_artifacts_release, keep_path=False)
 
     def package_info(self):
         self.cpp_info.libs = []
@@ -174,5 +178,7 @@ conan_basic_setup()""")
         self.cpp_info.release.libs = ["assimp-vc142-mt", "IrrXML", "zlib"]
         self.cpp_info.debug.libdirs = ["lib/Debug"]
         self.cpp_info.release.libdirs = ["lib/Release"]
+        self.cpp_info.debug.bindirs = ["lib/Debug"]
+        self.cpp_info.release.bindirs = ["lib/Release"]
         self.cpp_info.debug.includedirs = ["include_debug"]
         self.cpp_info.release.includedirs = ["include_release"]
